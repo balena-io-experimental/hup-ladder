@@ -11,5 +11,5 @@ By default this tool proceeds sequentially, to instead pick a random sort order,
 
 ## TODO
 
-Blacklist for known-bad versions
-Change from staging to other environments
+* Blacklist for known-bad versions
+* Change from staging to other environments
