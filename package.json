@@ -1,0 +1,32 @@
+{
+  "name": "hup-ladder",
+  "version": "0.0.1",
+  "description": "Tool for testing balenaOS updates both sequentially and randomly across OS versions in the staging environment of balenaCloud.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check": "tsc --pretty --noEmit --diagnostics --project ./tsconfig.json",
+    "lint": "balena-lint --typescript src test typings",
+    "lint:fix": "balena-lint --typescript --fix src test typings",
+    "build": "tsc --project . && copyfiles -e 'src/**/*.ts' 'src/**/*' \"$(jq -r .compilerOptions.outDir <tsconfig.json)\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/balena-io-playground/hup-ladder.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/balena-io-playground/hup-ladder/issues"
+  },
+  "homepage": "https://github.com/balena-io-playground/hup-ladder#readme",
+  "dependencies": {
+    "balena-sdk": "^12.31.13",
+    "request-promise": "^4.2.5",
+    "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "@balena/lint": "^5.0.2",
+    "prettify": "^0.1.7"
+  }
+}
