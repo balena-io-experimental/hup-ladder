@@ -8,21 +8,23 @@
     "check": "tsc --pretty --noEmit --diagnostics --project ./tsconfig.json",
     "lint": "balena-lint --typescript src test typings",
     "lint:fix": "balena-lint --typescript --fix src test typings",
-    "build": "tsc --project . && copyfiles -e 'src/**/*.ts' 'src/**/*' \"$(jq -r .compilerOptions.outDir <tsconfig.json)\""
+    "build": "tsc --project . && copyfiles -e 'src/**/*.ts' 'src/**/*' \"$(jq -r .compilerOptions.outDir <tsconfig.json)\"",
+    "start": "npm run build && node ./build/index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/balena-io-playground/hup-ladder.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/balena-io-playground/hup-ladder/issues"
   },
   "homepage": "https://github.com/balena-io-playground/hup-ladder#readme",
   "dependencies": {
     "balena-sdk": "^12.31.13",
-    "balena-semver": "^2.3.0"
+    "balena-semver": "^2.3.0",
+    "copyfiles": "^2.2.0"
   },
   "devDependencies": {
     "@balena/lint": "^5.0.2",
