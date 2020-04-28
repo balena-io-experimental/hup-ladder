@@ -15,7 +15,7 @@ if (!TOKEN) {
 
 balenaSdk.setSharedOptions({
 	dataDirectory: '/tmp/work',
-	apiUrl: `https://api.${STAGING ? 'balena-cloud' : 'balena-staging'}.com`,
+	apiUrl: `https://api.${STAGING ? 'balena-staging' : 'balena-cloud'}.com`,
  })
 
 // TODO: better way to source these? flags?
