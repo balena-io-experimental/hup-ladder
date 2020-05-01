@@ -3,8 +3,9 @@ import * as bSemver from 'balena-semver';
 
 const UUID = ((process.env.UUID as unknown) as string) ?? undefined;
 const TOKEN = ((process.env.TOKEN as unknown) as string) ?? undefined;
-const RANDOM = ((process.env.RANDOM_ORDER as unknown) as boolean) || false;
+const RANDOM = ((process.env.RANDOM_ORDER as unknown) as boolean) ?? false;
 const STAGING = ((process.env.STAGING as unknown) as boolean) || true;
+const STEP = ((process.env.STEP as unknown) as number) ?? 1;
 const maxFails = ((process.env.MAX_FAILS as unknown) as number) || 10;
 
 
@@ -64,7 +65,7 @@ const getNextTargetVersion = async (
 					? versions.versions[
 							Math.floor(Math.random() * versions.versions.length)
 					  ]
-					: versions.versions[versions.versions.length - 2];
+					: versions.versions[versions.versions.length - (2 * STEP)];
 			} else {
 				return null;
 			}
