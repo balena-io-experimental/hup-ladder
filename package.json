@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/balena-io-playground/hup-ladder#readme",
   "dependencies": {
-    "balena-sdk": "^12.31.13",
+    "balena-sdk": "^12.33.0",
     "balena-semver": "^2.3.0",
     "copyfiles": "^2.2.0"
   },

@@ -8,7 +8,6 @@ const STAGING = ((process.env.STAGING as unknown) as boolean) || true;
 const STEP = ((process.env.STEP as unknown) as number) ?? 1;
 const maxFails = ((process.env.MAX_FAILS as unknown) as number) || 10;
 
-
 if (!TOKEN) {
 	console.error('TOKEN required in environment');
 	process.exit(1);
@@ -78,16 +77,19 @@ const ongoingHUP = async (uuid: string): Promise<boolean> => {
 };
 
 const hupFailed = async (uuid: string, targetOS: string): Promise<boolean> => {
-	const hupStatus = await balena.models.device.getOsUpdateStatus(UUID);
-	if (hupStatus.status === HUPStatus.ERROR || hupStatus.fatal === true) {
-		console.log(hupStatus.error);
-		return true;
-	} else if (hupStatus.status === HUPStatus.DONE) {
-		const osVersion = await getDeviceVersion(uuid);
-		if (bSemver.gt(targetOS, osVersion)) {
-			console.log(`HUP done but not completed: target ${targetOS}, current: ${osVersion}`);
+	try {
+		const hupStatus = await balena.models.device.getOsUpdateStatus(UUID);
+		if (hupStatus.status === HUPStatus.ERROR || hupStatus.fatal === true) {
 			return true;
+		} else if (hupStatus.status === HUPStatus.DONE) {
+			const osVersion = await getDeviceVersion(uuid);
+			if (bSemver.gt(targetOS, osVersion)) {
+				console.log(`HUP done but not completed: target ${targetOS}, current: ${osVersion}`);
+				return true;
+			}
 		}
+	} catch (e) {
+		console.error(`error while getting status: ${e}`)
 	}
 	return false;
 };
@@ -129,16 +131,20 @@ const main = async () => {
 			process.exit(0);
 		} else {
 			console.log(`Updating ${UUID} to ${targetOS}..`);
-			balena.models.device.startOsUpdate(UUID, targetOS);
+			try {
+				balena.models.device.startOsUpdate(UUID, targetOS);
+			} catch (e) {
+				console.error(`error while starting update: ${e}`)
+			}
 			console.log(`Giving it a minute..`);
 			await delay(60000);
 			if (await hupFailed(UUID, targetOS)) {
 				fails++;
-				console.log(`HUP failed, retrying (failures: ${fails}/${maxFails})...`);
+				console.error(`HUP failed, retrying (failures: ${fails}/${maxFails})...`);
 			}
 		}
 	}
-	console.log(`HUP ladder exceeded error budget of ${maxFails}`);
+	console.error(`HUP ladder exceeded error budget of ${maxFails}`);
 	process.exit(1);
 };
 
